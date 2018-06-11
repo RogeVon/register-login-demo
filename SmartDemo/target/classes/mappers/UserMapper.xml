@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper  
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="smart.demo.mapper.UserMapper">
+	<!-- 用户注册 void insert(User user);当前方法需要执行INSERT操作,所以使用insert节点进行配置,每个节点的id都表示对应的方法名称. 
+		paraneterType表示参数类型,如果参数是基本类型或String可以不配置该属性.所有增删改操作默认返回值为受影响的行数,但是不配置返回值类型. -->
+	<!-- 如果INSERT时需要得到新数据的ID,则需要配置(id为数据库数据表的"id"). -->
+	<insert id="insert" parameterType="smart.demo.bean.User">
+		INSERT INTO
+		s_user_info(userName,passWord,phone)
+		VALUES
+		(#{userName},#{passWord},#{phone});
+	</insert>
+	<!-- User getUserByPhone(String phone) -->
+	<select id="getUserByPhone" resultType="smart.demo.bean.User">
+		select
+		userId as id,userName,passWord,phone
+		from
+		s_user_info
+		where
+		phone=#{phone};
+	</select>
+
+	<!-- 查询注册邮箱是否存在Integer getResultByEmail(String email) -->
+	<select id="getResultByEmail" resultType="java.lang.Integer">
+		select count(email)
+		from
+		t_user
+		where
+		email=#{email};
+	</select>
+
+	<!-- 查询注册手机号是否存在Integer getResultByPhone(String phone) -->
+	<select id="getResultByPhone" resultType="java.lang.Integer">
+		select count(phone)
+		from
+		t_user
+		where
+		phone=#{phone};
+	</select>
+
+	<!-- 通过id查询用户信息User getUserById(Integer id) -->
+	<select id="getUserById" resultType="smart.demo.bean.User">
+		select
+		userId,userName,passWord,
+		phone
+		from
+		s_user_info
+		where
+		userId=#{id};
+	</select>
+
+	<!-- 用户信息修改 void update(User user) -->
+	<update id="update" parameterType="smart.demo.bean.User">
+		update s_user_info
+		set
+		<if test="password != null">
+			password = #{password},
+		</if>
+		<if test="username != null">
+			username = #{username},
+		</if>
+		<if test="phone != null">
+			phone = #{phone},
+		</if>
+		where
+		userId = #{id}
+	</update>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
